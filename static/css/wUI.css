@@ -1,0 +1,237 @@
+.wui-inputbox {
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    font-size: inherit;
+    padding: 3px;
+}
+.wui-button {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    
+    background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+    background: -moz-linear-gradient(center bottom, #fafafa 0%, #f4f4f4 40%, #e5e5e5 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #aaa;
+    color: #444;
+    margin-bottom: 0;
+    min-width: 4em;
+    padding: 3px 12px;
+}
+.wui-button:hover {
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    
+    background: #ebebeb -webkit-linear-gradient(#fefefe, #f8f8f8 40%, #e9e9e9);
+    background: #ebebeb -moz-linear-gradient(center bottom, #fefefe 0%, #f8f8f8 40%, #e9e9e9 100%) repeat scroll 0 0 transparent;
+    border-color: #999;
+    color: #222;
+}
+.wui-button:active {
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    
+    background: #ebebeb -webkit-linear-gradient(#f4f4f4, #efefef 40%, #dcdcdc);
+    background: #ebebeb -moz-linear-gradient(center bottom, #f4f4f4 0%, #efefef 40%, #dcdcdc 100%) repeat scroll 0 0 transparent;
+    color: #333;
+}
+.wui-box {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+}
+.wui-box>* {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+}
+.wui-box-h {
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+}
+.wui-box-v {
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+}
+.wui-vertical-text {
+    position: relative;
+    display: inline-block;
+    white-space: pre;
+    cursor: vertical-text;
+    -moz-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    -moz-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+.wui-menubar, .wui-panel {
+    background: #ddd;
+    cursor: default;
+    -webkit-box-flex: 0;
+    -moz-box-flex: 0;
+    box-flex: 0;
+}
+.wui-menubar>* {
+    display: inline-block;
+}
+.wui-menubar>.wui-separator {
+    border: 1px solid #e0e0e0;
+    background: #efefef;
+    width: 1px;
+    height: 1.6em;
+    vertical-align: middle;
+}
+.wui-menubar>:not(.wui-separator), ul.wui-filetree>li>span {
+    border-radius: 3px;
+    margin: 0 2px 0 2px;
+    padding: 0 3px 0 3px;
+    position: relative;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.wui-panel>span {
+    padding: 2px;
+    display: inline-block;
+}
+.wui-menubar>:not(.wui-separator):hover, ul.wui-filetree>li>span:hover, .wui-panel>span>*:hover, .wui-menubar>:focus, .wui-menubar ul>li:not(.wui-separator):hover {
+    outline: none;
+    border-radius: 3px;
+    background: #aaa;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.wui-menubar ul {
+    position: absolute;
+    left: -2px;
+    min-width: 150px;
+    border-radius: 4px;
+    background: #ddd;
+    list-style-type: none;
+    padding: 2px;
+    margin: 0;
+    margin-top: 6px;
+    display: none;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.wui-menubar :focus>ul {
+    display: block;
+}
+.wui-menubar ul>li.wui-separator {
+    border: 1px solid #e0e0e0;
+    background: #efefef;
+    height: 1px;
+}
+.wui-menubar ul>li:not(.wui-separator) {
+    margin: 2px;
+    padding: 0;
+    padding-left: 2px;
+}
+.wui-menubar ul>li:not(.wui-separator)>img, .wui-panel>span>*>img, ul.wui-filetree>li>span>img {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+ul.wui-filetree {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+ul.wui-filetree>li {
+    position: relative;
+}
+ul.wui-filetree>li>ul.wui-filetree {
+    margin: 0;
+    margin-left: 16px;
+}
+ul.wui-filetree>li>span {
+    margin: 0;
+    margin-left: 14px;
+    display: block;
+    white-space: pre;
+}
+ul.wui-filetree>li>div {
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 12px;
+}
+ul.wui-filetree>li>div>input[type=checkbox] {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: 0;
+    -webkit-appearance: none;
+    width: 8px;
+    height: 8px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -moz-transform-origin: 75% 75%;
+    -webkit-transform-origin: 75% 75%;
+    transform-origin: 75% 75%;
+}
+ul.wui-filetree>li>div:hover>input[type=checkbox] {
+    border-color: #06f;
+}
+ul.wui-filetree>li>div>input[type=checkbox]:checked {
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.wui-editor {
+    font-family: monospace;
+    font-size: 14px;
+    outline: none;
+    overflow: auto;
+    white-space: pre;
+    word-wrap: normal;
+    width: 100%;
+    height: 100%;
+}
+/*HACK default Kate styles */
+.wui-editor {background: #FFFFFF}
+.wui-editor .dsKeyword {font-weight: bold}
+.wui-editor .dsDataType {color: #0057AE}
+.wui-editor .dsDecVal, .dsBaseN {color: #B08000}
+.wui-editor .dsChar {color: #FF80E0}
+.wui-editor .dsString, .dsError {color: #BF0303}
+.wui-editor .dsComment {font-style: italic; color: #888786}
+.wui-editor .dsOthers {color: #006E28}
+.wui-editor .dsFunction {color: #452886}
+.wui-editor .dsRegionMarker {color: #0057AE; background: #E0E9F8}
+.wui-editor .dsError {text-decoration: underline}
+/*HACK editor CSS in jsFiddle
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.time {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}*/
+.error {
+    display: none;
+    background: #fee;
+    color: #e66;
+    border: 1px solid #a66;
+}

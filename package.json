@@ -1,0 +1,27 @@
+{
+  "name": "wIDE",
+  "version": "0.0.1",
+  "description": "ERROR: No README.md file found!",
+  "main": "server",
+  "dependencies": {
+    "pty.js": "~0.1.2",
+    "express": "~2.5.11",
+    "bcrypt": "~0.6.0",
+    "less": "~1.3.0",
+    "tty.js": "~0.2.7",
+    "socket.io": "~0.9.6",
+    "mime-magic": "~0.2.6",
+    "bootstrap": "~2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/eddyb/wIDE.git"
+  },
+  "author": "eddyb",
+  "license": "BSD"
+}

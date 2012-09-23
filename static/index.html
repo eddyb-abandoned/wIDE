@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src=/socket.io/socket.io.js></script>
+        <!--<script src=https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js></script>-->
+        <script src=js/jQuery.1.7.2.min.js></script>
+        <!--<script src=http://github.com/cowboy/jquery-resize/raw/v1.1/jquery.ba-resize.min.js></script>-->
+        <script src=js/jquery.ba-resize.min.js></script>
+        <script src=js/wUI.js></script>
+        <script src=https://raw.github.com/mrdoob/stats.js/master/build/Stats.js></script>
+        <script src=https://raw.github.com/mrdoob/three.js/master/src/Three.js></script>
+        <script>
+            window.KateSyntax = {base: 'js/syntax', debugTime: true, debugTrace: false};
+            (function() {
+                var script = document.createElement('script');
+                script.src = KateSyntax.base+'/KateSyntax.js';
+                document.head.appendChild(script);
+            })();
+        </script>
+        <script src=js/wUI.editor.js></script>
+        <script src=js/tty.js/term.js></script>
+        <script src=js/wUI.terminal.js></script>
+        <script src=js/wIDE.js></script>
+        <script>
+            $(function() {
+                $ide.container = $('body');
+                $ide.socket = io.connect();
+                $ide.socket.on('connect', function() {
+                    $ide.showLoginBox();
+                }).on('reconnect', function() {
+                    $ide.showLoginBox();
+                });
+            });
+        </script>
+        <link href=less/wUI.less rel=stylesheet/less type=text/x-less>
+        <script src=js/less-1.3.0.min.js></script>
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+            }
+            body {
+                margin: 0;
+                font-size: 85%;
+                font-family: 'Open Sans', Arial, sans-serif;
+            }
+            .login {
+                width: 256px;
+                margin: 0 auto;
+                padding-top: 5%;
+            }
+            .login input {
+                width: 100%;
+            }
+
+            .terminal {
+                border: #000 solid 5px;
+                font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+                font-size: 11px;
+                color: #f0f0f0;
+                background: #000;
+            }
+            .reverse-video {
+                color: #000;
+                background: #f0f0f0;
+            }
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
