@@ -1,0 +1,3 @@
+[submodule "static/oxygen-icons"]
+	path = static/oxygen-icons
+	url = git://github.com/eddyb/oxygen-icons
