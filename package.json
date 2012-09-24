@@ -1,5 +1,5 @@
 {
-  "name": "wIDE",
+  "name": "wide",
   "version": "0.0.1",
   "description": "ERROR: No README.md file found!",
   "main": "server",
@@ -11,7 +11,8 @@
     "tty.js": "~0.2.7",
     "socket.io": "~0.9.6",
     "mime-magic": "~0.2.6",
-    "bootstrap": "~2.0.4"
+    "bootstrap": "~2.0.4",
+    "KateSyntax.js": "git://github.com/eddyb/KateSyntax.js"
   },
   "devDependencies": {},
   "scripts": {
