@@ -1,8 +1,8 @@
 #!/usr/bin/node --harmony
-
+//
 var fs = require('fs'), path = require('path'), pid;
-/*
-TODO process management
+
+/*TODO process management
 try {
     pid = +fs.readFileSync('lock.pid', 'utf8');
     pid = isNaN(pid) ? null : pid;
@@ -14,25 +14,13 @@ try {
 process.on('exit', fs.unlinkSync.bind(fs, 'lock.pid'));
 if(process.argv[2] == 'stop')
     process.exit();
-fs.writeFileSync('lock.pid', ''+process.pid);*/
+fs.writeFileSync('lock.pid', ''+process.pid);
+*/
 
-var express = require('express'), execFile = require('child_process').execFile, userManager = require('./userManager'), terminal = require('./terminal');
+var mimeIcons = fs.readdirSync(__dirname + '/static/oxygen-icons/16x16/mimetypes/')
 
+var execFile = require('child_process').execFile;
 function xdgMime(path, cb) {
-    /*if(Array.isArray(path)) {
-        if(!path.length)
-            return cb(null, []);
-        var results = [];
-        xdgMime(path[0], function f(err, out) {
-            if(err)
-                cb(err);
-            else if(results.push(out) >= path.length)
-                cb(null, results);
-            else
-                xdgMime(path[results.length], f);
-        });
-        return;
-    }*/
     execFile('xdg-mime', ['query', 'filetype'].concat([Array.isArray(path) ? path : [path]]), function (err, stdout) {
         stdout = stdout.trim();
         if (err) {
@@ -43,9 +31,8 @@ function xdgMime(path, cb) {
             cb(null, Array.isArray(path) ? stdout.split('\n') : stdout);
     });
 };
-var mimeIcons = fs.readdirSync(__dirname + '/static/oxygen-icons/16x16/mimetypes/')
 
-var app = express.createServer(), io = require('socket.io').listen(app);
+var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server);
 
 app.configure(function() {
     app.use(express.methodOverride());
@@ -61,6 +48,10 @@ app.get('/', function(req, res) {
 
 io.set('log level', 2);
 io.set('browser client minification', true);
+
+var userManager = require('./lib/userManager'), terminal = require('./lib/terminal');
+userManager.basePath = __dirname + '/users/';
+
 io.sockets.on('connection', function(socket) {
     socket.on('login', function(user, password, callback) {
         var data = userManager.login(user, password);
@@ -121,4 +112,4 @@ io.sockets.on('connection', function(socket) {
     });
 });
 
-app.listen(8080);
+server.listen(process.argv[2] || 8080);

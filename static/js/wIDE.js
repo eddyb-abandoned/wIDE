@@ -152,14 +152,4 @@ $ide.showIDE = function showIDE() {
     ], 'bottom');
 
     $ide.container.empty().append($ui.VBox(ui.menuBar, $ui.HBox(ui.leftPanel, $ui.VBox(ui.editor, ui.bottomPanel))).height('100%'));
-
-    $ide.stats = new Stats();
-    $ide.stats.domElement.style.position = 'absolute';
-    $ide.stats.domElement.style.top = $ide.stats.domElement.style.right = '0px';
-    $ide.container.append($ide.stats.domElement);
-    function fps() {
-        $ide.stats.id = requestAnimationFrame(fps);
-        $ide.stats.update();
-    }
-    fps();
 };
