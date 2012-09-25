@@ -236,6 +236,6 @@ $ui.FileTree = function FileTree(listFiles, clickFile, iconFile, path) {
         });
     });
     if(!path)
-        return $('<div>').append(list.css({display: 'inline-block', 'min-width': '100%'})).css({overflow: 'scroll', background: '#fff'});
+        return $ui.VBox().append(list.css('min-width', '100%')).css({overflow: 'auto', background: '#fff'});
     return list;
 };

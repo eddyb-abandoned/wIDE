@@ -52,24 +52,44 @@
     color: #333;
 }*/
 .wui-box {
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
+    display: -moz-box; /*HACK old syntax for -moz-*/
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
     >* {
-        -webkit-box-flex: 1;
-        -moz-box-flex: 1;
-        box-flex: 1;
+        -moz-box-flex: 1; /*HACK old syntax for -moz-*/
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        flex: 1;
     }
 }
 .wui-box-h {
-    -webkit-box-orient: horizontal;
-    -moz-box-orient: horizontal;
-    box-orient: horizontal;
+    -moz-box-orient: horizontal; /*HACK old syntax for -moz-*/
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    box-flex-direction: row;
+    /* Allows flexible elements to shrink below their content size */
+    >* {
+        min-width: 0px;
+    }
 }
 .wui-box-v {
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    box-orient: vertical;
+    -moz-box-orient: vertical; /*HACK old syntax for -moz-*/
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;
+    /* Allows flexible elements to shrink below their content size */
+    >* {
+        min-height: 0px;
+    }
+}
+.wui-noflex {
+    -moz-box-flex: 0; /*HACK old syntax for -moz-*/
+    -webkit-flex: 0;
+    -moz-flex: 0;
+    flex: 0;
+    min-width: initial;
+    min-height: initial;
 }
 .wui-vertical-text {
     position: relative;
@@ -86,9 +106,7 @@
 .wui-menubar, .wui-panel {
     background: #ddd;
     cursor: default;
-    -webkit-box-flex: 0;
-    -moz-box-flex: 0;
-    box-flex: 0;
+    .wui-noflex;
 }
 .wui-menubar>* {
     display: inline-block;
@@ -110,9 +128,14 @@
     -webkit-user-select: none;
     user-select: none;
 }
+.wui-panel>* {
+    /*HACK the .wui-panel element should have a fixed size, this is here until that problem is fixed*/
+    .wui-noflex;
+}
 .wui-panel>span {
     padding: 2px;
     display: inline-block;
+    .wui-noflex;
 }
 .wui-menubar>:not(.wui-separator):hover, ul.wui-filetree>li>span:hover, .wui-panel>span>*:hover, .wui-menubar>:focus, .wui-menubar ul>li:not(.wui-separator):hover {
     outline: none;

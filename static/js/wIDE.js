@@ -141,7 +141,7 @@ $ide.showIDE = function showIDE() {
         ]],
     ]);
 
-    ui.editor = $('<div>').css({background: '#aaa', width: '100%', height: '100%', overflow: 'scroll'});
+    ui.editor = $ui.VBox().css('background', '#aaa');
 
     ui.leftPanel = $ui.Panel([
         ['File browser', 'places/folder', $ui.FileTree($ide.listFiles, $ide.fileList.open.bind($ide.fileList), $ide.iconFile).width(250)]
@@ -151,5 +151,5 @@ $ide.showIDE = function showIDE() {
         ['Terminal', 'apps/utilities-terminal', $ui.Terminal($ide.socket)]
     ], 'bottom');
 
-    $ide.container.empty().append($ui.VBox(ui.menuBar, $ui.HBox(ui.leftPanel, $ui.VBox(ui.editor, ui.bottomPanel))).height('100%'));
+    $ide.container.empty().append($ui.VBox(ui.menuBar, $ui.HBox(ui.leftPanel, $ui.VBox(ui.editor, ui.bottomPanel))).width('100%').height('100%'));
 };
