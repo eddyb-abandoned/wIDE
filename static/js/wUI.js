@@ -112,6 +112,8 @@ $ui.classes = {
     'alert-error': 'well alert alert-error'
 };
 
+$ui.iconBase = 'http://websvn.kde.org/*checkout*/trunk/kdesupport/oxygen-icons/';
+
 $ui.Button = function Button(text, type) {
     return $('<button>').text(text||'').addClass($ui.classes['button'+(type?'-'+type:'')]);
 };
@@ -121,7 +123,7 @@ $ui.InputBox = function InputBox(type) {
 };
 
 $ui.Icon = function Icon(path, size) {
-    return $('<img>').attr('src', 'oxygen-icons/'+size+'x'+size+'/'+path+'.png');
+    return $('<img>').attr('src', $ui.iconBase+size+'x'+size+'/'+path+'.png');
 };
 
 $ui.AlertBox = function AlertBox(type) {

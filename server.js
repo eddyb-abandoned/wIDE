@@ -1,7 +1,7 @@
 #!/usr/bin/node --harmony
 //
-var fs = require('fs'), path = require('path'), pid;
 
+var fs = require('fs'), path = require('path'), pid;
 /*TODO process management
 try {
     pid = +fs.readFileSync('lock.pid', 'utf8');
@@ -16,8 +16,6 @@ if(process.argv[2] == 'stop')
     process.exit();
 fs.writeFileSync('lock.pid', ''+process.pid);
 */
-
-var mimeIcons = fs.readdirSync(__dirname + '/static/oxygen-icons/16x16/mimetypes/')
 
 var execFile = require('child_process').execFile;
 function xdgMime(path, cb) {
@@ -42,9 +40,9 @@ app.configure(function() {
     app.use(app.router);
 });
 
-app.get('/', function(req, res) {
+/*app.get('/', function(req, res) {
     res.sendfile(__dirname + '/index.html');
-});
+});*/
 
 io.set('log level', 2);
 io.set('browser client minification', true);
@@ -84,7 +82,7 @@ io.sockets.on('connection', function(socket) {
             xdgMime(userManager.path(socket.user.name) + '/projects/' + project + '/' + file, function(err, mime) {
                 if(err)
                     return console.error(err);
-                callback(mimeIcons.indexOf(mime.replace(/\//g, '-') + '.png') === -1 ? 'text/plain' : mime);
+                callback(mime);
             });
         });
 
