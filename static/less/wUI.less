@@ -1,56 +1,4 @@
 @import "bootstrap/bootstrap";
-//#bootstrap {
-//    @import "bootstrap/bootstrap";
-//    .button() {.btn}
-//}
-/*
-.wui-inputbox {
-    border: 1px solid #aaa;
-    border-radius: 2px;
-    font-size: inherit;
-    padding: 3px;
-}
-.wui-button {
-    //#bootstrap>.button();
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-
-    background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
-    background: -moz-linear-gradient(center bottom, #fafafa 0%, #f4f4f4 40%, #e5e5e5 100%) repeat scroll 0 0 transparent;
-    border: 1px solid #aaa;
-    color: #444;
-    margin-bottom: 0;
-    min-width: 4em;
-    padding: 3px 12px;
-}
-.wui-button:hover {
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-
-    background: #ebebeb -webkit-linear-gradient(#fefefe, #f8f8f8 40%, #e9e9e9);
-    background: #ebebeb -moz-linear-gradient(center bottom, #fefefe 0%, #f8f8f8 40%, #e9e9e9 100%) repeat scroll 0 0 transparent;
-    border-color: #999;
-    color: #222;
-}
-.wui-button:active {
-    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-
-    background: #ebebeb -webkit-linear-gradient(#f4f4f4, #efefef 40%, #dcdcdc);
-    background: #ebebeb -moz-linear-gradient(center bottom, #f4f4f4 0%, #efefef 40%, #dcdcdc 100%) repeat scroll 0 0 transparent;
-    color: #333;
-}*/
 .wui-box {
     display: -moz-box; /*HACK old syntax for -moz-*/
     display: -webkit-flex;
@@ -112,21 +60,27 @@
     display: inline-block;
 
     &.wui-separator {
-        border: 1px solid #e0e0e0;
-        border-top: none;
-        border-botton: none;
-        background: #efefef;
+        background: #777;
         width: 1px;
     }
 }
 .wui-menubar>:not(.wui-separator), ul.wui-filetree>li>span {
     border-radius: 3px;
-    margin: 0 2px 0 2px;
+    margin: 2px;
     padding: 0 3px 0 3px;
     position: relative;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+.wui-menubar {
+    border-bottom: 1px solid #777;
+}
+.wui-panel.wui-box-h {
+    border-right: 1px solid #777;
+}
+.wui-panel.wui-box-v {
+    border-top: 1px solid #777;
 }
 .wui-panel>* {
     /*HACK the .wui-panel element should have a fixed size, this is here until that problem is fixed*/
@@ -137,7 +91,7 @@
     display: inline-block;
     .wui-noflex;
 }
-.wui-menubar>:not(.wui-separator):hover, ul.wui-filetree>li>span:hover, .wui-panel>span>*:hover, .wui-menubar>:focus, .wui-menubar ul>li:not(.wui-separator):hover {
+.wui-menubar>:not(.wui-separator):hover, ul.wui-filetree>li>span:hover, .wui-panel>span>*:hover, .wui-menubar>:focus/*, .wui-menubar ul>li:not(.wui-separator):hover*/ {
     outline: none;
     border-radius: 3px;
     background: #aaa;
@@ -145,7 +99,7 @@
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-.wui-menubar ul {
+.wui-menubar ul {/*
     position: absolute;
     left: -2px;
     min-width: 150px;
@@ -169,12 +123,12 @@
         margin: 2px;
         padding: 0;
         padding-left: 2px;
-    }
+    }*/
 }
 .wui-menubar :focus>ul {
     display: block;
 }
-.wui-menubar ul>li:not(.wui-separator)>img, .wui-panel>span>*>img, ul.wui-filetree>li>span>img {
+/*.wui-menubar ul>li:not(.wui-separator)>img, */.wui-panel>span img, ul.wui-filetree>li>span>img {
     margin-right: 5px;
     vertical-align: middle;
 }
@@ -205,6 +159,7 @@ ul.wui-filetree {
                 top: 0;
                 margin: 0;
                 -webkit-appearance: none;
+                cursor: default;
                 width: 8px;
                 height: 8px;
                 border: solid black;

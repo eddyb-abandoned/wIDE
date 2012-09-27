@@ -109,7 +109,9 @@ $ui.classes = {
     'button': 'btn',
     'button-primary': 'btn btn-primary',
     'alert': 'well alert',
-    'alert-error': 'well alert alert-error'
+    'alert-error': 'well alert alert-error',
+    'menu': 'dropdown-menu',
+    'separator': /*wui-separator */'divider',
 };
 
 $ui.iconBase = 'http://websvn.kde.org/*checkout*/trunk/kdesupport/oxygen-icons/';
@@ -172,7 +174,7 @@ $ui.MenuBar = function MenuBar(menus) {
             bar.append('<div class=wui-separator>&nbsp;</div>');
             continue;
         }
-        var menuList = $('<ul>'), el = $('<div>').prop('tabIndex', 0).text(menu[0]).append(menuList).appendTo(bar).mouseover(function() {
+        var menuList = $('<ul>').addClass($ui.classes.menu), el = $('<div>').prop('tabIndex', 0).text(menu[0]).append(menuList).appendTo(bar).mouseover(function() {
             if(!$(this).is(':focus') && bar.children(':focus').length)
                 $(this).focus();
         }).mousedown(function() {
@@ -185,12 +187,14 @@ $ui.MenuBar = function MenuBar(menus) {
         for(var j in menu[1]) {
             var entry = menu[1][j];
             if(!entry) {
-                menuList.append('<li class=wui-separator>');
+                menuList.append($('<li>').addClass($ui.classes.separator));
                 continue;
             }
-            var menuEntry = $('<li>').text(entry[0]).prepend(entry[1] ? $ui.Icon(entry[1], 16) : '').appendTo(menuList);
+            var menuEntry = $('<a href=#>').text(entry[0]).appendTo($('<li>').appendTo(menuList));
+            if(entry[1])
+                menuEntry.prepend($ui.Icon(entry[1], 16), ' ')
             if(entry[2])
-                menuEntry.mousedown(entry[2]);
+                menuEntry.mousedown(function(e){e.stopPropagation();e.preventDefault();return false;}).click(entry[2]);
         }
     }
     return bar;
