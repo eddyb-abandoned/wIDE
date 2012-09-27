@@ -217,31 +217,52 @@ $ui.Panel = function Panel(views, side) {
     return (side == 'bottom' || side == 'right') ? panel.append(panelBar) : panel.prepend(panelBar);
 };
 
-$ui.FileTree = function FileTree(listFiles, clickFile, iconFile, path) {
-    var prefix = path ? path + '/' : '', list = $('<ul class=wui-filetree>');
-    listFiles(path, function(name, isDir) {
-        var icon = $ui.Icon(isDir ? 'mimetypes/inode-directory' : 'mimetypes/unknown', 16),
-            fileName = $('<span>').append(icon, name), file = $('<li>').append(fileName).appendTo(list);
-        if(isDir) {
-            var subTree, checkbox = $('<input type=checkbox>').change(function() {
-                if($(this).is(':checked'))
-                    subTree ? subTree.show() : subTree = $ui.FileTree(listFiles, clickFile, iconFile, prefix+name).appendTo(file);
-                else if(subTree)
-                    subTree.hide();
-            });
-            file.prepend($('<div>').append(checkbox).click(function(ev) {
-                if(ev.target == this)
-                    checkbox.click();
-            }));
-        } else
-            fileName.click(clickFile.bind(null, prefix+name));
-        iconFile(prefix + name, function(iconName) {
-            $ui.Icon(iconName, 16).load(function() {
-                icon.replaceWith(this);
-            });
-        });
-    });
+$ui.FileTree = function FileTree(path) {
+    var prefix = path ? path + '/' : '', list = $('<ul class=wui-filetree>'), files = {};
+    var tree = list;
     if(!path)
-        return $ui.VBox().append(list.css('min-width', '100%')).css({overflow: 'auto', background: '#fff'});
-    return list;
+        tree = $ui.VBox().append(list.css('min-width', '100%')).css({overflow: 'auto', background: '#fff'});
+    function addFile(name, isDir) {
+        var firstSlash = name.indexOf('/'), subPath = null;
+        if(firstSlash !== -1)
+            subPath = name.slice(firstSlash+1), name = name.slice(0, firstSlash), isDir = true;
+        var file = files[name];
+        if(!file) {
+            files[name] = file = {item: $('<li>').appendTo(list), isDir: isDir};
+            file.icon = $ui.Icon(isDir ? 'mimetypes/inode-directory' : 'mimetypes/unknown', 16);
+            file.label = $('<span>').append(file.icon, name).appendTo(file.item);
+            var fullName = prefix+name;
+            if(file.isDir) {
+                file.checkbox = $('<input type=checkbox>').change(function() {
+                    if(!file.subTree) {
+                        file.subTree = $ui.FileTree(fullName).appendTo(file.item);
+                        file.subTree.on('listDir', function(ev, path, callback) {return tree.triggerHandler('listDir', [path, callback]);})
+                        file.subTree.on('getIcon', function(ev, path, callback) {return tree.triggerHandler('getIcon', [path, callback]);});
+                        file.subTree.on('clickFile', function(ev, path) {return tree.triggerHandler('clickFile', path);});
+                    }
+                    this.checked ? file.subTree.show() : file.subTree.hide();
+                });
+                file.item.prepend($('<div>').append(file.checkbox).click(function(ev) {
+                    if(ev.target == this)
+                        file.checkbox.click();
+                }));
+            } else
+                file.label.click(tree.triggerHandler.bind(tree, 'clickFile', fullName));
+        }
+        if(subPath && file.isDir) {
+            if(!file.subTree)
+                file.checkbox.click();
+            if(file.subTree)
+                file.subTree.addFile(subPath);
+        }
+        tree.triggerHandler('getIcon', [fullName, function(iconName) {
+            var newIcon = $ui.Icon(iconName, 16).load(function() {
+                file.icon.replaceWith(newIcon);
+                file.icon = newIcon;
+            });
+        }]);
+    }
+    tree.addFile = addFile;
+    setTimeout(tree.triggerHandler.bind(tree, 'listDir', [path, addFile]), 0);
+    return tree;
 };

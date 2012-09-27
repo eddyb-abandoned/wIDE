@@ -22,7 +22,9 @@ $ide.showLoginBox = function showLoginBox() {
         form.submit();
 };
 
-$ide.listFiles = function listFiles(path, callback) {
+
+// TODO maybe move these somewhere else?
+$ide.listFiles = function listFiles(ev, path, callback) {
     if(!path)
         return $ide.socket.emit('project.list', function(projects) {
             for(var i in projects)
@@ -37,8 +39,7 @@ $ide.listFiles = function listFiles(path, callback) {
             callback(files[i][0], files[i][1]);
     });
 };
-
-$ide.iconFile = function iconFile(path, callback) {
+$ide.iconFile = function iconFile(ev, path, callback) {
     var firstSlash = path.indexOf('/'), project = firstSlash === -1 ? path : path.slice(0, firstSlash), file = firstSlash === -1 ? '' : path.slice(firstSlash+1);
     if(!file)
         return callback('places/folder-development');
@@ -50,18 +51,21 @@ $ide.iconFile = function iconFile(path, callback) {
     });
 };
 
+//BEGIN FileList
 $ide.FileList = function FileList() {
 };
-
 $ide.FileList.prototype = [];
 $ide.FileList.prototype.open = function open(path) {
     for(var i = 0; i < this.length; i++)
         if(this[i] && this[i].path == path)
             return this.show(this[i]);
     var firstSlash = path.indexOf('/'), project = firstSlash === -1 ? path : path.slice(0, firstSlash), file = firstSlash === -1 ? '' : path.slice(firstSlash+1);
-    var self = this;
+
+    var mime = $ide.mimeCache[path], self = this;
+    if(!mime)
+        return alert('Error: attempting to open a file too soon!');
     $ide.socket.emit('file.read', project, file, function(data) {
-        var editor = $ui.Editor({file: file, mime: $ide.mimeCache && $ide.mimeCache[path]}, data);
+        var editor = $ui.Editor({file: file, mime: mime}, data);
         editor.css({display: 'block', overflow: 'auto', width: '100%', height: '100%'});
         self.show({path: path, project: project, file: file, editor: editor});
     });
@@ -69,14 +73,13 @@ $ide.FileList.prototype.open = function open(path) {
 $ide.FileList.prototype.show = function show(file) {
     if(file == this.current)
         return;
-    if(file && this.indexOf(file) === -1)
+    if(file && this.indexOf(file) === -1) {
         this.push(file);
-    $ide.ui.editor.empty();
-    if(file) {
-        $ide.ui.editor.append(file.editor);
-        if(!file.prev && this.current)
-            file.prev = this.current;
+        $ide.ui.documentTree && $ide.ui.documentTree.addFile(file.path);
     }
+    $ide.ui.editor.empty();
+    if(file)
+        $ide.ui.editor.append(file.editor);
     this.current = file;
 };
 $ide.FileList.prototype.save = function save(file) {
@@ -94,19 +97,12 @@ $ide.FileList.prototype.close = function close(file) {
     var i = this.indexOf(file);
     if(i === -1)
         return;
-    delete this[i];
-    if(i == this.length - 1) {
-        while(i >= 0 && !this[i])
-            i--;
-        this.length = i+1;
-    }
+    this.splice(i, 1);
     delete this.current;
-    if(this.indexOf(file.prev) === -1)
-        this.show(this[this.length-1]);
-    else
-        this.show(file.prev);
-    file.editor.remove();
+    this.show(this[i-1] || this[i]);
+    file.editor && file.editor.remove();
 };
+//END FileList
 
 $ide.showIDE = function showIDE() {
     $ide.fileList = new $ide.FileList;
@@ -119,7 +115,7 @@ $ide.showIDE = function showIDE() {
         ['wIDE', [
             ['Logout', 'actions/application-exit', function() {
                 delete sessionStorage.password;
-                document.location.reload();
+                location.reload();
             }],
         ]],
         ['Project', [
@@ -144,7 +140,8 @@ $ide.showIDE = function showIDE() {
     ui.editor = $ui.VBox().css('background', '#aaa');
 
     ui.leftPanel = $ui.Panel([
-        ['File browser', 'places/folder', $ui.FileTree($ide.listFiles, $ide.fileList.open.bind($ide.fileList), $ide.iconFile).width(250)]
+        ['Documents', 'places/folder-documents', ui.documentTree = $ui.FileTree().on('getIcon', $ide.iconFile).on('clickFile', function(ev, path) {$ide.fileList.open(path);}).width(250)],
+        ['File browser', 'places/folder', $ui.FileTree().on('listDir', $ide.listFiles).on('getIcon', $ide.iconFile).on('clickFile', function(ev, path) {$ide.fileList.open(path);}).width(250)]
     ], 'left');
 
     ui.bottomPanel = $ui.Panel([
