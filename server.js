@@ -1,21 +1,60 @@
+var fs = require('fs');
 
-var fs = require('fs'), path = require('path'), pid;
-/*TODO process management
+var port = 8080, lockFile = __dirname + '/lock.pid', pid, doStop = process.argv[2] == 'stop';
+if(!doStop)
+    var express = require('express'), app = express(), execFile = require('child_process').execFile, server = require('http').createServer(app), io = require('socket.io').listen(server);
+
+// "Daemon"-like system.
+// FIXME simplify and DRY the logic here.
 try {
-    pid = +fs.readFileSync('lock.pid', 'utf8');
-    pid = isNaN(pid) ? null : pid;
-    if(pid)
-        process.kill(pid);
-} catch(e) {
-    // HACK ignore errors
-}
-process.on('exit', fs.unlinkSync.bind(fs, 'lock.pid'));
-if(process.argv[2] == 'stop')
-    process.exit();
-fs.writeFileSync('lock.pid', ''+process.pid);
-*/
+    pid = +fs.readFileSync(lockFile, 'utf8');
+    pid = !isNaN(pid) && pid;
+} catch(e) {}
 
-var execFile = require('child_process').execFile;
+function done() {
+    process.on('exit', function() {
+        if(fs.existsSync(lockFile))
+            fs.unlinkSync(lockFile);
+    });
+    process.on('SIGTERM', process.exit.bind(process, 0));
+    if(!doStop) {
+        server.listen(port);
+        fs.writeFileSync(lockFile, ''+process.pid);
+    } else
+        process.exit();
+}
+
+if(pid) {
+    // Try to kill the old process. If that fails with ESRCH, it means the original process is gone.
+    try {
+        process.kill(pid);
+    } catch(e) {
+        if(e.code != 'ESRCH')
+            throw e;
+        pid = false;
+    }
+}
+if(pid) {
+    var failTimeout = setTimeout(function() {
+        console.error('Error: old wIDE instance not exiting or stale lock.pid. If wIDE is no longer running, try removing lock.pid first.');
+        process.exit(1);
+    }, 2000);
+    try {
+        var watcher = fs.watch(lockFile, {persistent: false}, function() {
+            if(!fs.existsSync(lockFile))
+                clearTimeout(failTimeout), watcher.close(), done();
+        });
+    } catch(e) {
+        if(e.code != 'ENOENT')
+            throw e;
+        clearTimeout(failTimeout), done();
+    }
+} else
+    done();
+
+if(doStop)
+    return;
+
 function xdgMime(path, cb) {
     execFile('xdg-mime', ['query', 'filetype'].concat([Array.isArray(path) ? path : [path]]), function (err, stdout) {
         stdout = stdout.trim();
@@ -28,7 +67,6 @@ function xdgMime(path, cb) {
     });
 };
 
-var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server);
 
 app.configure(function() {
     app.use(express.methodOverride());
@@ -107,5 +145,3 @@ io.sockets.on('connection', function(socket) {
         callback();
     });
 });
-
-server.listen(process.argv[2] || 8080);

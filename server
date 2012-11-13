@@ -1,4 +1,0 @@
-#!/bin/bash
-
-killall -w server.js
-(cd `dirname $(readlink -m $0)`; node --harmony server.js&)
