@@ -118,7 +118,7 @@ io.sockets.on('connection', function(socket) {
             xdgMime(userManager.path(socket.user.name) + '/projects/' + project + '/' + file, function(err, mime) {
                 if(err)
                     return console.error(err);
-                callback(mime);
+                callback(mime.replace(/;.*$/, ''));
             });
         });
 
