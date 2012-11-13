@@ -65,7 +65,7 @@ $ide.FileList.prototype.open = function open(path) {
     if(!mime)
         return alert('Error: attempting to open a file too soon!');
     $ide.socket.emit('file.read', project, file, function(data) {
-        var editor = $ui.Editor({file: file, mime: mime}, data);
+        var editor = $ui.CodeEditor({file: file, mime: mime}, data);
         editor.css({display: 'block', overflow: 'auto', width: '100%', height: '100%'});
         self.show({path: path, project: project, file: file, editor: editor});
     });

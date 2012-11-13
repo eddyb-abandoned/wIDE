@@ -67,7 +67,6 @@ function xdgMime(path, cb) {
     });
 };
 
-
 app.configure(function() {
     app.use(express.methodOverride());
     app.use(express.bodyParser());
@@ -83,8 +82,20 @@ app.configure(function() {
 io.set('log level', 2);
 io.set('browser client minification', true);
 
-var userManager = require('./lib/userManager'), terminal = require('./lib/terminal');
-userManager.basePath = __dirname + '/users/';
+var config = require('./config');
+
+var userManager = require('./lib/userManager');
+userManager.basePath = config.userDir;
+
+var modules = (config.modules || []).map(function(name) {
+    var module = require(config.moduleDir+'/'+name);
+    if(module.load)
+        module.load(app);
+    return module;
+});
+
+// TODO put this in an actual module.
+modules.push(require('./lib/terminal'));
 
 io.sockets.on('connection', function(socket) {
     socket.on('login', function(user, password, callback) {
@@ -92,7 +103,6 @@ io.sockets.on('connection', function(socket) {
         if(!data)
             return callback('<b>Login failed</b> user/password don\'t match!');
         socket.user = data;
-        terminal.enable(socket);
 
         socket.on('project.list', function(callback) {
             callback(socket.user.projects.map(function(project) {return project.name;}));
@@ -143,5 +153,13 @@ io.sockets.on('connection', function(socket) {
         });
 
         callback();
+
+        // Enable all the modules for this user.
+        // TODO per-user module management.
+        // TODO module disabling.
+        modules.forEach(function(module) {
+            if(module.enable)
+                module.enable(socket);
+        });
     });
 });

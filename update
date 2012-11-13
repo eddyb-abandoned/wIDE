@@ -1,0 +1,3 @@
+#!/bin/bash
+npm update
+for i in modules/*; do (cd $i; npm update); done;

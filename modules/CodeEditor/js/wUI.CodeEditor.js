@@ -1,4 +1,11 @@
-$ui.Editor = function Editor(file, originalText) {
+window.KateSyntax = {base: 'js/KateSyntax', debugTime: true, debugTrace: false};
+(function() {
+    var script = document.createElement('script');
+    script.src = KateSyntax.base+'/KateSyntax.js';
+    document.head.appendChild(script);
+})();
+
+$ui.CodeEditor = function CodeEditor(file, originalText) {
     var oldText = '', editor = $('<div class=wui-editor contenteditable spellcheck=false>'), hl;
 
     // Change handler, redoes highlighting.

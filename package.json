@@ -4,7 +4,6 @@
   "description": "ERROR: No README.md file found!",
   "main": "server",
   "dependencies": {
-    "KateSyntax.js": "git://github.com/eddyb/KateSyntax.js",
     "tty.js": "git://github.com/eddyb/tty.js",
     "less": "~1.3.0",
     "pty.js": "~0.1.2",
