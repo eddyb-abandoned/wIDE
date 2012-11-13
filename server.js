@@ -1,5 +1,3 @@
-#!/usr/bin/node --harmony
-//
 
 var fs = require('fs'), path = require('path'), pid;
 /*TODO process management
