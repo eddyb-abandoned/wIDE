@@ -17,6 +17,9 @@ function done() {
             fs.unlinkSync(lockFile);
     });
     process.on('SIGTERM', process.exit.bind(process, 0));
+    process.on('SIGHUP', function() {
+        console.error('Ignoring SIGHUP');
+    });
     if(!doStop) {
         server.listen(port);
         fs.writeFileSync(lockFile, ''+process.pid);

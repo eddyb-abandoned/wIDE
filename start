@@ -1,0 +1,10 @@
+#!/bin/bash
+WIDE_DIR=$(dirname $(readlink -m $0))
+if [ ! -d "$WIDE_DIR/node_modules" ]; then
+    "$WIDE_DIR/install"
+fi
+# FIXME append the same message to both of the logs, in one go.
+START_DATE=$(date)
+echo -e "\n==== Log started at $START_DATE ====" >> "$WIDE_DIR/wide.log"
+echo -e "\n==== Log started at $START_DATE ====" >> "$WIDE_DIR/wide_error.log"
+(cd "$WIDE_DIR"; node server >> "$WIDE_DIR/wide.log" 2>> "$WIDE_DIR/wide_error.log")&
