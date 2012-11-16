@@ -1,3 +1,4 @@
 #!/bin/bash
+(cd "$(dirname $(readlink -m $0))";
 npm update
-for i in modules/*; do (cd $i; npm update); done;
+for i in modules/*; do (cd $i; npm update); done;)
