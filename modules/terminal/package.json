@@ -1,0 +1,9 @@
+{
+  "name": "terminal",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "tty.js": "git://github.com/eddyb/tty.js",
+    "pty.js": "~0.1.2"
+  }
+}

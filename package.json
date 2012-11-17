@@ -1,22 +1,16 @@
 {
   "name": "wide",
   "version": "0.0.1",
-  "description": "ERROR: No README.md file found!",
-  "main": "server",
+  "main": "start",
   "dependencies": {
-    "tty.js": "git://github.com/eddyb/tty.js",
     "less": "~1.3.0",
-    "pty.js": "~0.1.2",
     "bcrypt": "~0.7.2",
     "express": "~3.0.0rc4",
     "socket.io": "~0.9.10",
-    "mime-magic": "~0.3.0",
     "twitter-bootstrap": "~2.1.1"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "server"
+    "start": "start"
   },
   "repository": {
     "type": "git",

@@ -97,9 +97,6 @@ var modules = (config.modules || []).map(function(name) {
     return module;
 });
 
-// TODO put this in an actual module.
-modules.push(require('./lib/terminal'));
-
 io.sockets.on('connection', function(socket) {
     socket.on('login', function(user, password, callback) {
         var data = userManager.login(user, password);
