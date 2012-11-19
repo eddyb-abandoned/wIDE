@@ -28,14 +28,10 @@ function done() {
 }
 
 if(pid) {
-    // Try to kill the old process. If that fails with ESRCH, it means the original process is gone.
+    // Try to kill the old process.
     try {
         process.kill(pid);
-    } catch(e) {
-        if(e.code != 'ESRCH')
-            throw e;
-        pid = false;
-    }
+    } catch(e) {}
 }
 if(pid) {
     var failTimeout = setTimeout(function() {
