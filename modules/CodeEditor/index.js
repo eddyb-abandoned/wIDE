@@ -1,10 +1,9 @@
-exports.load = function load(app) {
+exports.load = function load(app, express) {
     app.get('/js/wUI.CodeEditor.js', function(req, res) {
         res.sendfile(__dirname+'/js/wUI.CodeEditor.js');
     });
-    app.get('/js/KateSyntax/:file', function(req, res) {
-        res.sendfile(__dirname+'/node_modules/KateSyntax.js/syntax/'+req.param('file'));
-    });
+    
+    app.use('/js/KateSyntax/', express.static(__dirname + '/node_modules/KateSyntax.js/syntax/'));
 };
 
 exports.enable = function enable(socket) {

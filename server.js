@@ -93,7 +93,7 @@ userManager.basePath = config.userDir;
 var modules = (config.modules || []).map(function(name) {
     var module = require(config.moduleDir+'/'+name);
     if(module.load)
-        module.load(app);
+        module.load(app, express);
     return module;
 });
 
@@ -152,8 +152,6 @@ io.sockets.on('connection', function(socket) {
             });
         });
 
-        callback();
-
         // Enable all the modules for this user.
         // TODO per-user module management.
         // TODO module disabling.
@@ -161,5 +159,7 @@ io.sockets.on('connection', function(socket) {
             if(module.enable)
                 module.enable(socket);
         });
+
+        callback();
     });
 });

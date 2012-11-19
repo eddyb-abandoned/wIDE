@@ -1,6 +1,7 @@
 Terminal.cursorBlink = false;
 
 $ui.Terminal = function Terminal(socket) {
+    $ui.Terminal.enable(socket); // HACK in place of a better module initialization.
     var term = new window.Terminal(80, 20, function(data) {
         socket.emit('terminal.data', data, term.id);
     });
