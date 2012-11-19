@@ -40,6 +40,7 @@ $ide.listFiles = function listFiles(ev, path, callback) {
     });
 };
 $ide.iconFile = function iconFile(ev, path, callback) {
+    path = path || '';
     var firstSlash = path.indexOf('/'), project = firstSlash === -1 ? path : path.slice(0, firstSlash), file = firstSlash === -1 ? '' : path.slice(firstSlash+1);
     if(!file)
         return callback('places/folder-development');
@@ -66,7 +67,7 @@ $ide.FileList.prototype.open = function open(path) {
         return alert('Error: attempting to open a file too soon!');
     $ide.socket.emit('file.read', project, file, function(data) {
         var editor = $ui.CodeEditor({file: file, mime: mime}, data);
-        editor.css({display: 'block', overflow: 'auto', width: '100%', height: '100%'});
+        editor.css({display: 'block', 'overflow-y': 'scroll', /* HACK there's a bug where overflow: auto doesn't work properly */ width: '100%', height: '100%'});
         self.show({path: path, project: project, file: file, editor: editor});
     });
 };
@@ -105,11 +106,9 @@ $ide.FileList.prototype.close = function close(file) {
 //END FileList
 
 $ide.showIDE = function showIDE() {
-    $ide.fileList = new $ide.FileList;
-
-    $ui.Terminal.enable($ide.socket);
-
     var ui = $ide.ui = {};
+
+    $ide.fileList = new $ide.FileList;
 
     ui.menuBar = $ui.MenuBar([
         ['wIDE', [
