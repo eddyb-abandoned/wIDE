@@ -59,7 +59,14 @@ if(doStop)
     return;
 
 function xdgMime(path, cb) {
-    execFile('xdg-mime', ['query', 'filetype'].concat([Array.isArray(path) ? path : [path]]), function (err, stdout) {
+    // HACK right now the only mimetype set that has consistent icons and syntax highlighting
+    // is KDE's, with Oxygen for icons and Kate (via KateSyntax.js) for syntax highlighting.
+    // If you have another solution, please add a new issue at https://github.com/eddyb/wIDE/issues/new
+    var env = {};
+    for(var i in process.env)
+        env[i] = process.env[i];
+    env.XDG_CURRENT_DESKTOP = 'KDE';
+    execFile('xdg-mime', ['query', 'filetype'].concat([Array.isArray(path) ? path : [path]]), {env: env}, function (err, stdout) {
         stdout = stdout.trim();
         if (err) {
             if (stdout)
