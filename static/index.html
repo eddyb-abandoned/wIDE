@@ -25,6 +25,30 @@
                         };
                     script.src = src;
                     document.head.appendChild(script);
+                }).on('loadScriptES6', function(src, cb) {
+                    function load() {
+                        $.get(src, function(res) {
+                            var file = new traceur.syntax.SourceFile(src, res);
+                            var tree = traceur.codegeneration.Compiler.compileFile(traceur_reporter, file, document.location.href);
+                            if(!traceur_reporter.hadError()) {
+                                var script = document.createElement('script');
+                                script.setAttribute('data-traceur-src-url', file.name);
+                                script.textContent = traceur.outputgeneration.TreeWriter.write(tree);
+                                document.head.appendChild(script);
+                                if(cb)
+                                    cb();
+                            }
+                        }, 'text');
+                    }
+                    if(window.traceur)
+                        return load();
+                    var script = document.createElement('script');
+                    script.onload = function() {
+                        traceur_reporter = new traceur.util.ErrorReporter;
+                        load();
+                    };
+                    script.src = 'js/traceur-compiler/bin/traceur.js';
+                    document.head.appendChild(script);
                 });
             });
         </script>

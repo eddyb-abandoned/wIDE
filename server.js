@@ -177,6 +177,10 @@ io.sockets.on('connection', function(socket) {
             socket.emit('loadScript', src, socket.deferLoading(cb));
         };
 
+        socket.loadScriptES6 = function loadScriptES6(src, cb) {
+            socket.emit('loadScriptES6', src, socket.deferLoading(cb));
+        };
+
         modules.forEach(function(module) {
             if(module.enable)
                 module.enable(socket);
