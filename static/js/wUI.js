@@ -75,11 +75,13 @@ $ui.MenuBar = function MenuBar(menus) {
         var menuList = $('<ul>').addClass($ui.classes.menu), el = $('<div>').prop('tabIndex', 0).text(menu[0]).append(menuList).appendTo(bar).mouseover(function() {
             if(!$(this).is(':focus') && bar.children(':focus').length)
                 $(this).focus();
-        }).mousedown(function() {
-            if($(this).is(':focus'))
-                document.activeElement.blur();
-            else
-                $(this).focus();
+        }).mousedown(function(ev) {
+            if(this == ev.target) {
+                if($(this).is(':focus'))
+                    document.activeElement.blur();
+                else
+                    $(this).focus();
+            }
             return false;
         });
         for(var j in menu[1]) {
@@ -91,8 +93,12 @@ $ui.MenuBar = function MenuBar(menus) {
             var menuEntry = $('<a href=#>').text(entry[0]).appendTo($('<li>').appendTo(menuList));
             if(entry[1])
                 menuEntry.prepend($ui.Icon(entry[1], 16), ' ')
-            if(entry[2])
-                menuEntry.mousedown(function(e){e.stopPropagation();e.preventDefault();return false;}).click(entry[2]);
+            menuEntry.click(function() {
+                if(this[2])
+                    this[2]();
+                document.activeElement.blur();
+                return false;
+            }.bind(entry));
         }
     }
     return bar;
