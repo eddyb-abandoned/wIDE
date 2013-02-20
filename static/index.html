@@ -11,6 +11,7 @@
         <script src=js/wIDE.js></script>
         <script>
             $(function() {
+                var traceur_reporter;
                 $ide.container = $('body');
                 $ide.socket = io.connect();
                 $ide.socket.on('connect', function() {
