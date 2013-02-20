@@ -133,7 +133,8 @@ $ui.FileTree = function FileTree(path) {
             if(file.isDir) {
                 file.checkbox = $('<input type=checkbox>').change(function() {
                     if(!file.subTree) {
-                        file.subTree = $ui.FileTree(fullName).appendTo(file.item);
+                        file.subTree = $ui.FileTree(fullName);
+                        file.item.append(file.subTree);
                         file.subTree.on('listDir', function(ev, path, callback) {return tree.triggerHandler('listDir', [path, callback]);})
                         file.subTree.on('getIcon', function(ev, path, callback) {return tree.triggerHandler('getIcon', [path, callback]);});
                         file.subTree.on('clickFile', function(ev, path) {return tree.triggerHandler('clickFile', path);});
