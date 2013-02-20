@@ -19,8 +19,10 @@ exports.enable = function enable(socket) {
     if(socket.terms)
         return;
 
-    socket.emit('loadScript', '/js/tty.js/term.js');
-    socket.emit('loadScript', '/js/wUI.terminal.js');
+    socket.loadScript('/js/tty.js/term.js', function() {
+        socket.loadScript('/js/wUI.terminal.js');
+    });
+
     socket.terms = [];
 
     socket.on('terminal.create', function(callback) {

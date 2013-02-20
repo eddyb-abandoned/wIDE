@@ -17,8 +17,12 @@
                     $ide.showLoginBox();
                 }).on('reconnect', function() {
                     $ide.showLoginBox();
-                }).on('loadScript', function(src) {
+                }).on('loadScript', function(src, cb) {
                     var script = document.createElement('script');
+                    if(cb)
+                        script.onload = function() {
+                            cb();
+                        };
                     script.src = src;
                     document.head.appendChild(script);
                 });

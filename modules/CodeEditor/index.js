@@ -7,5 +7,5 @@ exports.load = function load(app, express) {
 };
 
 exports.enable = function enable(socket) {
-    socket.emit('loadScript', '/js/wUI.CodeEditor.js');
+    socket.loadScript('/js/wUI.CodeEditor.js');
 };

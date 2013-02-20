@@ -158,11 +158,31 @@ io.sockets.on('connection', function(socket) {
         // Enable all the modules for this user.
         // TODO per-user module management.
         // TODO module disabling.
+        var ref = 0;
+        socket.deferLoading = function deferLoading(cb) {
+            ref++;
+            var derefd = false;
+            return function(unused) { // Unused argument so socket.io doesn't end up throwing the function away.
+                if(!derefd) {
+                    derefd = true;
+                    if(cb)
+                        cb();
+                    if(!--ref)
+                        callback();
+                }
+            };
+        }
+
+        socket.loadScript = function loadScript(src, cb) {
+            socket.emit('loadScript', src, socket.deferLoading(cb));
+        };
+
         modules.forEach(function(module) {
             if(module.enable)
                 module.enable(socket);
         });
 
-        callback();
+        if(!ref)
+            callback();
     });
 });
