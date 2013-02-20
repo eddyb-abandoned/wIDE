@@ -55,21 +55,27 @@ $ide.iconFile = function iconFile(ev, path, callback) {
 //BEGIN FileList
 $ide.FileList = function FileList() {
 };
+$ide.FileList.handlers = [];
 $ide.FileList.prototype = [];
+$ide.FileList.prototype.constructor = $ide.FileList;
 $ide.FileList.prototype.open = function open(path) {
     for(var i = 0; i < this.length; i++)
         if(this[i] && this[i].path == path)
             return this.show(this[i]);
     var firstSlash = path.indexOf('/'), project = firstSlash === -1 ? path : path.slice(0, firstSlash), file = firstSlash === -1 ? '' : path.slice(firstSlash+1);
 
-    var mime = $ide.mimeCache[path], self = this;
+    var mime = $ide.mimeCache[path];
     if(!mime)
         return alert('Error: attempting to open a file too soon!');
-    $ide.socket.emit('file.read', project, file, function(data) {
-        var editor = $ui.CodeEditor({file: file, mime: mime}, data);
-        editor.css({display: 'block', 'overflow-y': 'scroll', /* HACK there's a bug where overflow: auto doesn't work properly */ width: '100%', height: '100%'});
-        self.show({path: path, project: project, file: file, editor: editor});
+
+    var handlers = $ide.FileList.handlers.filter(function(h) {
+        return h.match(file, mime);
     });
+    if(!handlers.length)
+        return alert('There is no way to open file '+path+' with mimetype '+mime);
+    if(handlers.length > 1)
+        return alert('There is is more than one way to open file '+path+' with mimetype '+mime);
+    handlers[0].open(project, file, path, mime);
 };
 $ide.FileList.prototype.show = function show(file) {
     if(file == this.current)
@@ -87,9 +93,7 @@ $ide.FileList.prototype.save = function save(file) {
     file = file || this.current;
     if(!file)
         return;
-    $ide.socket.emit('file.write', file.project, file.file, file.editor.getText(), function() {
-        console.log('Saved', file.path);
-    });
+    file.handler.save(file);
 };
 $ide.FileList.prototype.close = function close(file) {
     file = file || this.current;

@@ -166,3 +166,21 @@ $ui.CodeEditor = function CodeEditor(file, originalText) {
 
     return editor;
 };
+
+$ide.FileList.handlers.push({
+    match: function(file, mime) {
+        return !!KateSyntax.find({file: file, mime: mime});
+    },
+    open: function(project, file, path, mime) {
+        $ide.socket.emit('file.read', project, file, function(data) {
+            var editor = $ui.CodeEditor({file: file, mime: mime}, data);
+            editor.css('overflow-y', 'scroll'); // HACK there's a bug where overflow: auto doesn't work properly sometimes.
+            $ide.fileList.show({path: path, project: project, file: file, editor: editor, handler: this});
+        });
+    },
+    save: function(file) {
+        $ide.socket.emit('file.write', file.project, file.file, file.editor.getText(), function() {
+            console.log('Saved', file.path);
+        });
+    }
+});
